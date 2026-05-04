@@ -1,0 +1,22 @@
+name: Envoi Meteo Matin
+on:
+  schedule:
+    # 05:00 UTC = 06:00 à Martigny / 06:00 UTC = 07:00 à Martigny
+    - cron: '0 5,6 * * *'
+  workflow_dispatch: # Permet de tester avec un bouton "Play"
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install Library
+        run: pip install requests
+      - name: Run Script
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: python weather_bot.py
